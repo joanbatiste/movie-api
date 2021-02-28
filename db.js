@@ -10,9 +10,10 @@ const QUERY_STRING = MONGO_USER ?
 `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DBNAME}`:
 `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DBNAME}`
 
-const db = mongoose.connect(QUERY_STRING, {useNewUrlParser: true, useUnifiedTopology: true});
+// Connection to DB
+const db = mongoose.connect(QUERY_STRING,{useNewUrlParser: true, useUnifiedTopology: true})
+.then(console.log('Connected to Database'))
+.catch((error) => console.log(error));
 
-module.exports = db.then((result) => {
-    console.log('database connection success');
-    return result;
-});
+module.exports = db;
+
