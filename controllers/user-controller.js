@@ -1,6 +1,11 @@
 //Requerimos el modelo de user para crear la clase controladora del user
 const User = require("../models/user-model");
 
+//Importacion de librerías para hass de password
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
+const secret = process.env.JWT_SECRET || 'unapalabrasecreta';
+
 class UserController{
     constructor(){
 
@@ -12,8 +17,26 @@ class UserController{
 
     //Crear users
     async createNewUser(user){
+        user.password = await bcrypt.hash(user.password, 5)
         return User.create(user);
     };
+
+    async login(email,password){
+        const user =  await User.findOne({email})
+        if(!user){
+            throw new Error('Email does not exist')
+        }
+        if (!await bcrypt.compare(password,user.password)){
+            throw new Error('Password incorrect')
+        }
+
+        const payload = {
+            userId: user.id,
+            tokenCreationDate: new Date,
+        }
+
+        return jwt.sign(payload, secret);
+    };q
 
     //Mostrar un user por Id
     async findById(id){
