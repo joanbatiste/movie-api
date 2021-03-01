@@ -6,15 +6,16 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const orderSchema = new Schema({
     
-    ownerId:{
-        type: ObjectId,
-        ref: "User",
-        require:true
-    },
+    
     filmId: {
         type: ObjectId,
         ref: "Film",
         require: true
+    },
+    userId:{
+        type: ObjectId,
+        ref: "User",
+        require:true
     },
     order_date:{
         type: Date,
